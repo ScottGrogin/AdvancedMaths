@@ -207,5 +207,11 @@ public class AdvancedMathTest {
 
 
     }
+    @Test
+    public void matrixMultiply(){
+        assertArrayEquals(AdvancedMath.identityMatrix(100).getMatrixArray(),
+                AdvancedMath.matrixMultiply(AdvancedMath.identityMatrix(100),
+                        AdvancedMath.identityMatrix(100)).getMatrixArray(),DELTA);
+    }
 
 }

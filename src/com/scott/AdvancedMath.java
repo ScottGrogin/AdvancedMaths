@@ -38,6 +38,16 @@ public class AdvancedMath {
         }
         return sum;
     }
+    public static double dotProduct(double[]A, double[]B){
+        if(A.length != B.length) {
+            throw new IllegalArgumentException("Inputs A and B must be the same size to compute dot product.");
+        }
+        double sum = 0;
+        for(int i = 0; i <A.length;i++){
+            sum+=A[i]*B[i];
+        }
+        return sum;
+    }
     public static double magnitude(ArrayList<Double> inputs) {
         double sum = 0;
         for(Double d:inputs) {
@@ -52,7 +62,6 @@ public class AdvancedMath {
         }
         return Math.sqrt(sum);
     }
-
     public static ArrayList<Double> scalarMultiply(double scale, ArrayList<Double> inputs) {
         ArrayList<Double>  scaled = new ArrayList<>();
         for(Double d : inputs) {
@@ -60,7 +69,6 @@ public class AdvancedMath {
         }
         return scaled;
     }
-
     public static double[] scalarMultiply(double scale, double[] inputs) {
         double [] scaled = new double[inputs.length];
         for(int i = 0; i < inputs.length; i++) {
@@ -103,5 +111,18 @@ public class AdvancedMath {
             normalized[i] = inputs[i]/mag;
         }
         return normalized;
+    }
+    public static Matrix matrixMultiply(Matrix A, Matrix B) {
+        if(A.getColumns() !=  B.getRows()){
+            throw new IllegalArgumentException("The number of columns in matrix A must match the number of " +
+                    "rows in matrix B.");
+        }
+        Matrix result = new Matrix(A.getRows(),B.getColumns());
+        for(int i = 0; i<result.getMatrixArray().length;i++){
+            int row = i/result.getColumns();
+            int col = i%result.getColumns();
+            result.setCell(row,col ,AdvancedMath.dotProduct(A.getRow(row),B.getColumn(col)));
+        }
+        return result;
     }
 }

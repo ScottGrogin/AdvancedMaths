@@ -34,6 +34,26 @@ public class Matrix {
         }
         matrixArray[row*columns+col] = value;
     }
+    public double[] getRow(int rowNum){
+        if (rowNum < 0 || rowNum > rows - 1){
+            throw new IllegalArgumentException("Indices are out of bounds.");
+        }
+        double[] result = new double[columns];
+        for(int i = 0; i < columns; i++){
+            result[i] = getCell(rowNum,i);
+        }
+        return  result;
+    }
+    public double[] getColumn(int colNum){
+        if(colNum < 0 || colNum > columns - 1){
+            throw new IllegalArgumentException("Indices are out of bounds.");
+        }
+        double[] result = new double[rows];
+        for(int i = 0; i < rows; i++){
+            result[i] = getCell(i,colNum);
+        }
+        return result;
+    }
     public int getRows(){
         return rows;
     }
