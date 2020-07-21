@@ -1,12 +1,32 @@
 import com.scott.AdvancedMath;
+import com.scott.Matrix;
 import org.junit.Test;
 
 import java.util.ArrayList;
-
 import static org.junit.Assert.*;
 
 public class AdvancedMathTest {
     private final double DELTA = 0.0001;
+
+    @Test
+    public void identityMatrix(){
+        Matrix m = AdvancedMath.identityMatrix(3);
+        assertEquals(1,m.getCell(0,0),DELTA);
+        assertEquals(0,m.getCell(0,1),DELTA);
+        assertEquals(0,m.getCell(0,2),DELTA);
+        assertEquals(0,m.getCell(1,0),DELTA);
+        assertEquals(1,m.getCell(1,1),DELTA);
+        assertEquals(0,m.getCell(1,2),DELTA);
+        assertEquals(0,m.getCell(2,0),DELTA);
+        assertEquals(0,m.getCell(2,1),DELTA);
+        assertEquals(1,m.getCell(2,2),DELTA);
+        try{
+            AdvancedMath.identityMatrix(0);
+            fail();
+        }catch (IllegalArgumentException e) {
+           assertEquals("The dimension of the matrix must be at least 1",e.getMessage());
+        }
+    }
     @Test
     public void lerp() {
         assertEquals(0, AdvancedMath.lerp(0,0,0), DELTA);
@@ -79,6 +99,8 @@ public class AdvancedMathTest {
         vec.add(2.0);//[-1,0,2]
         vec.add(2.0);//[-1,0,2,2]
         assertEquals(3, AdvancedMath.magnitude(vec), DELTA);
+        assertEquals(5,AdvancedMath.magnitude(new double[]{2,2,2,2,2,2,1}),DELTA);
+        assertEquals(0,AdvancedMath.magnitude(new double[]{}),DELTA);
     }
 
     @Test
@@ -102,6 +124,14 @@ public class AdvancedMathTest {
         assertEquals(2,result.get(1), DELTA);
         assertEquals(3,result.get(2), DELTA);
         assertEquals(-4,result.get(3), DELTA);
+
+        double[] resultArr = {0,2,4,6,8};
+
+        assertArrayEquals(resultArr, AdvancedMath.scalarMultiply(2, new double[]{0, 1, 2, 3, 4}), DELTA);
+
+        assertArrayEquals(new double[]{0,2,4,6},
+                AdvancedMath.scalarMultiply(2,
+                        new Matrix(2,2,new double[]{0,1,2,3})).getMatrixArray(),DELTA);
     }
 
     @Test
@@ -161,5 +191,21 @@ public class AdvancedMathTest {
         assertEquals(0,result.get(0),DELTA);
         assertEquals(1,result.get(1),DELTA);
         assertEquals(0,result.get(2),DELTA);
+
+        assertArrayEquals(new double[]{0,1,0},AdvancedMath.normalize(new double[]{0,64328164,0}),DELTA);
+        assertArrayEquals(new double[]{-1,0,0},AdvancedMath.normalize(new double[]{-10420,0,0}),DELTA);
     }
+
+    @Test
+    public void herp() {
+        assertEquals(0, AdvancedMath.herp(0,0,0), DELTA);
+        assertEquals(0,AdvancedMath.herp(-1,1,0.5), DELTA);
+        assertEquals(0,AdvancedMath.herp(0,1,0), DELTA);
+        assertEquals(1,AdvancedMath.herp(0,1,1), DELTA);
+        assertEquals(0.5,AdvancedMath.herp(0,1,0.5), DELTA);
+        assertEquals(15.625,AdvancedMath.herp(0,100,0.25), DELTA);
+
+
+    }
+
 }
