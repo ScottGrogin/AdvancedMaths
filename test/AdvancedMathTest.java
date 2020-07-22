@@ -87,6 +87,12 @@ public class AdvancedMathTest {
         } catch(IllegalArgumentException e) {
             assertEquals("Inputs A and B must be the same size to compute dot product.",e.getMessage());
         }
+        try {
+            double d = AdvancedMath.dotProduct(new double[]{0,1,2},new double[]{0});
+            fail();
+        } catch(IllegalArgumentException e) {
+            assertEquals("Inputs A and B must be the same size to compute dot product.",e.getMessage());
+        }
     }
 
     @Test
@@ -204,14 +210,116 @@ public class AdvancedMathTest {
         assertEquals(1,AdvancedMath.herp(0,1,1), DELTA);
         assertEquals(0.5,AdvancedMath.herp(0,1,0.5), DELTA);
         assertEquals(15.625,AdvancedMath.herp(0,100,0.25), DELTA);
-
-
     }
     @Test
     public void matrixMultiply(){
+        ArrayList<Double> input = new ArrayList<>();
+        input.add(3.0);
+        input.add(6.0);
+        input.add(9.0);
+        ArrayList<Double> result = new ArrayList<>();
+        result.add(6.0);
+        result.add(12.0);
+        result.add(18.0);
         assertArrayEquals(AdvancedMath.identityMatrix(100).getMatrixArray(),
                 AdvancedMath.matrixMultiply(AdvancedMath.identityMatrix(100),
                         AdvancedMath.identityMatrix(100)).getMatrixArray(),DELTA);
+        assertArrayEquals(new double[]{0,0,0},
+                AdvancedMath.matrixMultiply(AdvancedMath.identityMatrix(3),new double[]{0,0,0}),DELTA);
+        assertArrayEquals(new double[]{3,6,9},
+                AdvancedMath.matrixMultiply(AdvancedMath.identityMatrix(3),new double[]{3,6,9}),DELTA);
+        assertArrayEquals(new double[]{3,12,0},
+                AdvancedMath.matrixMultiply(new Matrix(3,3,new double[]{1,0,0,0,2,0,0,0,0})
+                        ,new double[]{3,6,9}),DELTA);
+        assertEquals(result,AdvancedMath.matrixMultiply(
+                new Matrix(3,3,new double[]{2,0,0,0,2,0,0,0,2}),input));
+        try{
+            input.add(9876.0);
+           AdvancedMath.matrixMultiply(new Matrix(3,3,new double[]{2,0,0,0,2,0,0,0,2}),input);
+            fail();
+        }catch(IllegalArgumentException e){
+            assertEquals("The number of columns in matrix A must match the number of " +
+                    "elements in vector B.",e.getMessage());
+        }
+        try{
+            AdvancedMath.matrixMultiply(AdvancedMath.identityMatrix(3),new double[]{0,0,0,0});
+            fail();
+        }catch(IllegalArgumentException e){
+            assertEquals("The number of columns in matrix A must match the number of " +
+                    "elements in vector B.",e.getMessage());
+        }
+        try{
+            AdvancedMath.matrixMultiply(AdvancedMath.identityMatrix(100),
+                    AdvancedMath.identityMatrix(10)).getMatrixArray();
+            fail();
+        }catch(IllegalArgumentException e){
+            assertEquals("The number of columns in matrix A must match the number of " +
+                    "rows in matrix B.",e.getMessage());
+        }
     }
-
+    @Test
+    public void getSubMatrix(){
+       for( double d : AdvancedMath.identityMatrix(2).getMatrixArray()){
+         System.out.println(d);
+        }
+        assertArrayEquals(new double[]{1,0,0,1},AdvancedMath.getSubMatrix(AdvancedMath.identityMatrix(3),
+                0,0).getMatrixArray(),DELTA);
+    }
+    @Test
+    public void det(){
+        try{
+            AdvancedMath.det(new Matrix(4,5));
+            fail();
+        }catch(IllegalArgumentException e){
+            assertEquals("Matrix must have same number of " +
+                    "rows and columns to calculate determinant.",e.getMessage());
+        }
+        assertEquals(2,AdvancedMath.det(new Matrix(1,1,
+                new double[]{2})),DELTA);
+        assertEquals(-376,AdvancedMath.det(new Matrix(4,4,
+                new double[]{1,3,5,9,1,3,1,7,4,3,9,7,5,2,0,9})),DELTA);
+        assertEquals(-195064,AdvancedMath.det(new Matrix(5,5,
+                new double[]{5,1,3,0,1,9,4,1,3,8,5,0,8,1,3,1,8,3,99,10,43,9,84,90,1})),DELTA);
+    }
+    @Test
+    public void subtract(){
+        double[] A = new double[]{1,2,3,4,5,6,7,8,9};
+        double[] B = new double[]{9,8,7,6,5,4,3,2,1};
+        ArrayList<Double> aAL= new ArrayList<>();
+        aAL.add(1.0);
+        aAL.add(2.0);
+        aAL.add(3.0);
+        ArrayList<Double> bAL= new ArrayList<>();
+        bAL.add(3.0);
+        bAL.add(2.0);
+        bAL.add(1.0);
+        ArrayList<Double>result = new ArrayList<>();
+        result.add(-2.0);
+        result.add(0.0);
+        result.add(2.0);
+        assertArrayEquals(new double[]{-8,-6,-4,-2,0,2,4,6,8},AdvancedMath.subtract(A,B),DELTA);
+        assertArrayEquals(new double[]{-8,-6,-4,-2,0,2,4,6,8},AdvancedMath.subtract(
+                new Matrix(3,3,A),new Matrix(3,3,B)).getMatrixArray(),DELTA);
+        assertEquals(result, AdvancedMath.subtract(aAL, bAL));
+        B = new double[]{1,2,3,4};
+        bAL.add(1234567.0);
+        try{
+            AdvancedMath.subtract(new Matrix(3,3,A),new Matrix(2,2,B));
+            fail();
+        }catch (IllegalArgumentException e){
+            assertEquals("Matrices A and B must have the same dimensions to add.",e.getMessage());
+        }
+        try{
+            AdvancedMath.subtract(A,B);
+            fail();
+        }catch (IllegalArgumentException e){
+            assertEquals("Vectors A and B must be the same size to add.",e.getMessage());
+        }
+        try{
+            AdvancedMath.subtract(aAL,bAL);
+            fail();
+        }catch (IllegalArgumentException e){
+            assertEquals("Vectors A and B must be the same size to add.",e.getMessage());
+        }
+    }
 }

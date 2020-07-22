@@ -94,4 +94,36 @@ public class MatrixTest {
         assertEquals(3, m.getColumns());
         assertEquals(3, m.getRows());
     }
+    @Test
+    public void getRowOrCol(){
+        Matrix m = new Matrix(3,3,new double[]{1,2,3,
+                                                             4,5,6,
+                                                             7,8,9});
+        assertArrayEquals(new double[]{4,5,6},m.getRow(1),DELTA);
+        assertArrayEquals(new double[]{3,6,9},m.getColumn(2),DELTA);
+        try {
+            m.getRow(-1);
+            fail();
+        } catch(IllegalArgumentException e) {
+            assertEquals("Indices are out of bounds.", e.getMessage());
+        }
+        try {
+            m.getRow(3);
+            fail();
+        } catch(IllegalArgumentException e) {
+            assertEquals("Indices are out of bounds.", e.getMessage());
+        }
+        try {
+            m.getColumn(-1);
+            fail();
+        } catch(IllegalArgumentException e) {
+            assertEquals("Indices are out of bounds.", e.getMessage());
+        }
+        try {
+            m.getColumn(3);
+            fail();
+        } catch(IllegalArgumentException e) {
+            assertEquals("Indices are out of bounds.", e.getMessage());
+        }
+    }
 }

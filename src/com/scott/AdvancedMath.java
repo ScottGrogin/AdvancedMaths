@@ -125,4 +125,107 @@ public class AdvancedMath {
         }
         return result;
     }
+    public static double[] matrixMultiply(Matrix A, double[] B) {
+        if(A.getColumns() !=  B.length){
+            throw new IllegalArgumentException("The number of columns in matrix A must match the number of " +
+                    "elements in vector B.");
+        }
+        double[] result = new double[B.length];
+        for(int i = 0; i<A.getRows();i++){
+           result[i] = AdvancedMath.dotProduct(A.getRow(i),B);
+        }
+        return result;
+    }
+    public static ArrayList<Double> matrixMultiply(Matrix A, ArrayList<Double>B) {
+        if(A.getColumns() !=  B.size()){
+            throw new IllegalArgumentException("The number of columns in matrix A must match the number of " +
+                    "elements in vector B.");
+        }
+        ArrayList<Double> result = new ArrayList<>();
+        for(int i = 0; i<A.getRows();i++){
+            ArrayList<Double> tmp = new ArrayList<>();
+            for(double d: A.getRow(i)){
+                tmp.add(d);
+            }
+            result.add( AdvancedMath.dotProduct(tmp  ,B));
+        }
+        return result;
+    }
+    public static Matrix add(Matrix A, Matrix B){
+        if(A.getRows()!=B.getRows() || A.getColumns() != B.getColumns()){
+            throw new IllegalArgumentException("Matrices A and B must have the same dimensions to add.");
+        }
+        double[] result = new double[A.getMatrixArray().length];
+        for(int i = 0; i< A.getMatrixArray().length;i++){
+            result[i] = A.getMatrixArray()[i]+B.getMatrixArray()[i];
+        }
+        return new Matrix(A.getRows(),A.getColumns(),result);
+    }
+    public static double[] add(double[]A, double[]B){
+        if(A.length!=B.length){
+            throw new IllegalArgumentException("Vectors A and B must be the same size to add.");
+        }
+        double[] result = new double[A.length];
+        for(int i = 0; i < A.length;i++){
+            result[i]= A[i]+B[i];
+        }
+        return result;
+    }
+
+    public static ArrayList<Double> add(ArrayList<Double>A, ArrayList<Double>B){
+        if(A.size()!=B.size()){
+            throw new IllegalArgumentException("Vectors A and B must be the same size to add.");
+        }
+        ArrayList<Double> result = new ArrayList<>();
+        for(int i = 0; i <A.size();i++){
+            result.add(A.get(i)+B.get(i));
+        }
+        return result;
+    }
+
+    public static Matrix subtract(Matrix A, Matrix B){
+        return add(A,scalarMultiply(-1,B));
+    }
+    public static double[] subtract(double[]A, double[]B){
+        return add(A,scalarMultiply(-1,B));
+    }
+    public static ArrayList<Double> subtract(ArrayList<Double>A, ArrayList<Double>B){
+        return add(A,scalarMultiply(-1,B));
+    }
+    public static Matrix getSubMatrix(Matrix m, int rowExclude, int colExclude){
+        m.getCell(rowExclude,colExclude);
+        double[] result = new double[(m.getRows()-1)*(m.getColumns()-1)];
+        int resIndx = 0;
+        for(int i = 0; i < m.getMatrixArray().length;i++){
+            int row = i/m.getColumns();
+            int col = i%m.getColumns();
+
+            if(row != rowExclude && col != colExclude){
+                result[resIndx] = m.getCell(row,col);
+                resIndx++;
+            }
+        }
+        return new Matrix((m.getRows()-1),(m.getColumns()-1),result);
+    }
+    public static double det(Matrix m) {
+        if(m.getRows() != m.getColumns()){
+            throw new IllegalArgumentException("Matrix must have same number of " +
+                    "rows and columns to calculate determinant.");
+        }
+        if(m.getRows() == 1){
+            return m.getMatrixArray()[0];
+        }
+        if(m.getRows() == 2){
+            return ((m.getCell(0,0)*m.getCell(1,1))
+                    -(m.getCell(0,1)*m.getCell(1,0)));
+        }
+        double sum = 0;
+        double flip = -1;
+        for(int i = 0; i<m.getColumns(); i++){
+            flip*=-1;
+            double a = m.getCell(0,i);
+            sum+= flip*a*det(getSubMatrix(m,0,i));
+        }
+        return sum;
+    }
 }
