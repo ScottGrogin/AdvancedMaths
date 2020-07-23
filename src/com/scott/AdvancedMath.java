@@ -57,19 +57,11 @@ public class AdvancedMath {
     }
 
     public static double magnitude(ArrayList<Double> inputs) {
-        double sum = 0;
-        for (Double d : inputs) {
-            sum += d * d;
-        }
-        return Math.sqrt(sum);
+        return Math.sqrt(dotProduct(inputs,inputs));
     }
 
     public static double magnitude(double[] inputs) {
-        double sum = 0;
-        for (double d : inputs) {
-            sum += d * d;
-        }
-        return Math.sqrt(sum);
+        return Math.sqrt(dotProduct(inputs,inputs));
     }
 
     public static ArrayList<Double> scalarMultiply(double scale, ArrayList<Double> inputs) {
@@ -214,7 +206,21 @@ public class AdvancedMath {
     public static ArrayList<Double> subtract(ArrayList<Double> A, ArrayList<Double> B) {
         return add(A, scalarMultiply(-1, B));
     }
-
+    //Proj B onto A
+    public static double[] proj(double[] A,double[]B){
+        double denom = dotProduct(A,A);
+        if(denom == 0 ){
+            throw new IllegalArgumentException("A dot A can't be 0 for projection.");
+        }
+        return scalarMultiply( dotProduct(A,B)/denom,A);
+    }
+    public static ArrayList<Double> proj(ArrayList<Double> A, ArrayList<Double> B){
+        double denom = dotProduct(A,A);
+        if(denom == 0 ){
+            throw new IllegalArgumentException("A dot A can't be 0 for projection.");
+        }
+        return scalarMultiply( dotProduct(A,B)/dotProduct(A,A),A);
+    }
     public static Matrix getSubMatrix(Matrix m, int rowExclude, int colExclude) {
         m.getCell(rowExclude, colExclude);
         double[] result = new double[(m.getRows() - 1) * (m.getColumns() - 1)];

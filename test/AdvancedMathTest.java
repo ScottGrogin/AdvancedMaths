@@ -420,4 +420,35 @@ public class AdvancedMathTest {
 
                 AdvancedMath.matrixMultiply(x, AdvancedMath.inv(x)).getMatrixArray(), DELTA);
     }
+    @Test
+    public void proj(){
+        assertArrayEquals(new double[]{1.0/2.0,0,3.0/2.0},
+                AdvancedMath.proj(new double[]{1,0,3},new double[]{-1,4,2}),DELTA);
+        ArrayList<Double> res = new ArrayList<>();
+        res.add(9.0/5.0);
+        res.add(18.0/5.0);
+        ArrayList<Double> A = new ArrayList<>();
+        A.add(2.0);
+        A.add(4.0);
+        ArrayList<Double> B = new ArrayList<>();
+        B.add(-1.0);
+        B.add(5.0);
+        assertEquals(res,AdvancedMath.proj(A,B));
+        try{
+            AdvancedMath.proj(new double[]{0,0,0},new double[]{-1,4,2});
+            fail();
+        } catch (IllegalArgumentException e){
+            assertEquals("A dot A can't be 0 for projection.",e.getMessage());
+        }
+        try{
+            A.clear();
+            A.add(0.0);
+            A.add(0.0);
+            A.add(0.0);
+            AdvancedMath.proj(A,B);
+            fail();
+        } catch (IllegalArgumentException e){
+            assertEquals("A dot A can't be 0 for projection.",e.getMessage());
+        }
+    }
 }
