@@ -296,4 +296,10 @@ public class AdvancedMath {
         }
         return scalarMultiply(1.0 / det, adj(m));
     }
+    public static double[] reflect(double[] A, double[] B){
+        return add(A,scalarMultiply(-2*dotProduct(B,A),B));
+    }
+    public static ArrayList<Double> reflect( ArrayList<Double>A,  ArrayList<Double>B){
+        return add(A,scalarMultiply(-2*dotProduct(B,A),B));
+    }
 }

@@ -451,4 +451,19 @@ public class AdvancedMathTest {
             assertEquals("A dot A can't be 0 for projection.",e.getMessage());
         }
     }
+    @Test
+    public void reflect(){
+        ArrayList<Double> res = new ArrayList<>();
+        res.add(1.0);
+        res.add(-1.0);
+        ArrayList<Double> A = new ArrayList<>();
+        A.add(1.0);
+        A.add(1.0);
+        ArrayList<Double> B = new ArrayList<>();
+        B.add(0.0);
+        B.add((1.0));
+        assertArrayEquals(new double[]{1,-1},AdvancedMath.reflect(new double[]{1,1},new double[]{0,1}),DELTA);
+        assertEquals(res,AdvancedMath.reflect(A,B));
+
+    }
 }
