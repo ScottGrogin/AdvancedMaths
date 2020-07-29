@@ -171,8 +171,14 @@ public class AdvancedMathTest {
         } catch (IllegalArgumentException e) {
             assertEquals("Inputs A and B need to be of size 3 to compute cross product.", e.getMessage());
         }
-
-
+        assertArrayEquals(new double[]{0,-1,0},AdvancedMath.crossProduct(new double[]{1,0,0},new double[]{0,0,1}),DELTA);
+        assertArrayEquals(new double[]{0,1,0},AdvancedMath.crossProduct(new double[]{0,0,1},new double[]{1,0,0}),DELTA);
+        try {
+            AdvancedMath.crossProduct(new double[]{0}, new double[]{1,2});
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertEquals("Inputs A and B need to be of size 3 to compute cross product.", e.getMessage());
+        }
     }
 
     @Test
