@@ -62,6 +62,18 @@ public class AdvancedMath {
     }
 
     /**
+     * map takes a value bound by range x1,y1 and converts in to a value in the range of x2,y2.
+     * @param value number to be converted.
+     * @param x1 start of original range.
+     * @param y1 end of original range.
+     * @param x2 start of new range.
+     * @param y2 end of new range.
+     * @return mapped value.
+     */
+    public static double map(double value, double x1, double y1, double x2, double y2){
+        return x2+((value-x1)*(y2-x2))/(y1-x1);
+    }
+    /**
      * fract returns the fractional portion of a number.
      * 4.123 returns 0.123
      * -3.14 returns -0.14
@@ -198,7 +210,6 @@ public class AdvancedMath {
         if (A.length != 3 || B.length != 3) {
             throw new IllegalArgumentException("Inputs A and B need to be of size 3 to compute cross product.");
         }
-        ArrayList<Double> cross = new ArrayList<>();
         double a1 = A[0], a2 = A[1], a3 = A[2];
         double b1 = B[0], b2 = B[1], b3 = B[2];
         return new double[]{((a2 * b3) - (a3 * b2)), ((a3 * b1) - (a1 * b3)), ((a1 * b2) - (a2 * b1))};
@@ -402,6 +413,7 @@ public class AdvancedMath {
      * @param colExclude Column to ignore
      * @return The minor of m at row and col exclude.
      */
+
     public static Matrix getSubMatrix(Matrix m, int rowExclude, int colExclude) {
         m.getCell(rowExclude, colExclude);
         double[] result = new double[(m.getRows() - 1) * (m.getColumns() - 1)];

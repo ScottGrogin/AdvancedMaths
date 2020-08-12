@@ -219,7 +219,11 @@ public class AdvancedMathTest {
         assertEquals(0.5, AdvancedMath.herp(0, 1, 0.5), DELTA);
         assertEquals(15.625, AdvancedMath.herp(0, 100, 0.25), DELTA);
     }
-
+    @Test
+    public void map(){
+        assertEquals(2,AdvancedMath.map(0.5,0,1,1,3),DELTA);
+        assertEquals(50,AdvancedMath.map(0.5,0,1,0,100),DELTA);
+    }
     @Test
     public void matrixMultiply() {
         ArrayList<Double> input = new ArrayList<>();
